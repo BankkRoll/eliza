@@ -28,7 +28,9 @@ export const ChromeMessageSchema = z.object({
     'TAB_ACTION',
     'WINDOW_ACTION',
     'BOOKMARK_ACTION',
-    'HISTORY_ACTION'
+    'HISTORY_ACTION',
+    'ALARM_ACTION',
+    'CONTEXT_MENU_ACTION'
   ]),
   payload: z.unknown(),
   timestamp: z.number(),
@@ -57,11 +59,15 @@ export interface ChromeClientConfig {
   allowedOrigins: string[];
   maxTabs: number;
   memoryRetention: number;
+  encryptionKey: string;
 }
 
 export interface ChromeMessageHandler {
-  initialize(runtime: IAgentRuntime): Promise<void>;
-  handleMessage(message: ChromeMessage): Promise<void>;
-  cleanup(): Promise<void>;
+  handle(message: ChromeMessage): Promise<any>;
 }
 
+export interface Storage {
+  get(key: string): Promise<any>;
+  set(key: string, value: any): Promise<void>;
+  remove(key: string): Promise<void>;
+}
